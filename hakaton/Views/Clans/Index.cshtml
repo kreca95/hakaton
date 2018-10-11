@@ -1,0 +1,70 @@
+﻿@model IEnumerable<hakaton.Models.Clan>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Dodajte clana", "Create")
+</p>
+<table class="table" id="tablica">
+    <thead>
+
+        <tr>
+            <th>
+                Ime
+            </th>
+            <th>
+                Prezime
+            </th>
+            <th>
+                Datum rodjenja
+            </th>
+            <th>
+                Adresa
+            </th>
+            <th>
+                Broj telefona
+            </th>
+
+            <th>
+                Email
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prezime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Datum_Rodjenja)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Adresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Broj_telefona)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelitem => item.Email)
+            </td>
+            <td>
+                @Html.ActionLink("Uredi", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Detalji", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Izbrisi", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Evidencija";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Evidencija</h2>
+
+
+
+<table class="table" id="tablica">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Naziv knjige</th>
+            <th>Ime clana</th>
+            <th>Email clana</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Evidencija)
+        {
+            <tr>
+                <td>
+                    @item.ID
+                </td>
+                <td>
+                    @item.Knjiga.Naziv
+                </td>
+                <td>
+                    @item.Clan.Ime @item.Clan.Prezime
+                </td>
+                <td>
+                    @item.Clan.Email
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

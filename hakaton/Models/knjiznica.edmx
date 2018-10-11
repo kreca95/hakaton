@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="knjiznicaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="50" />
+          <Property Name="Prezime" Type="varchar" MaxLength="50" />
+          <Property Name="Datum_Rodjenja" Type="varchar" MaxLength="50" />
+          <Property Name="Adresa" Type="varchar" MaxLength="50" />
+          <Property Name="Broj_telefona" Type="varchar" MaxLength="50" />
+          <Property Name="Datum_obnove_clanstva" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="UlogaID" Type="int" />
+          <Property Name="Pass" Type="varchar" MaxLength="50" />
+          <Property Name="KnjigaID" Type="int" />
+        </EntityType>
+        <EntityType Name="Knjiga">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="varchar" MaxLength="50" />
+          <Property Name="Autor" Type="varchar" MaxLength="50" />
+          <Property Name="Godina_izdanja" Type="int" />
+          <Property Name="Dostupnost" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Knjiznicar">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="50" />
+          <Property Name="Prezime" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Pass" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Rezervacija">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Clan_ID" Type="int" />
+          <Property Name="Knjiga_ID" Type="int" />
+          <Property Name="Datum" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Uloga" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Clan_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Clan" Type="Self.Clan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Clan">
+              <PropertyRef Name="UlogaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezervacija_Clan">
+          <End Role="Clan" Type="Self.Clan" Multiplicity="0..1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clan">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="Clan_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezervacija_Knjiga">
+          <End Role="Knjiga" Type="Self.Knjiga" Multiplicity="0..1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Knjiga">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="Knjiga_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="knjiznicaModelStoreContainer">
+          <EntitySet Name="Clan" EntityType="Self.Clan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Knjiga" EntityType="Self.Knjiga" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Knjiznicar" EntityType="Self.Knjiznicar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rezervacija" EntityType="Self.Rezervacija" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Clan_Role" Association="Self.FK_Clan_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Clan" EntitySet="Clan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezervacija_Clan" Association="Self.FK_Rezervacija_Clan">
+            <End Role="Clan" EntitySet="Clan" />
+            <End Role="Rezervacija" EntitySet="Rezervacija" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezervacija_Knjiga" Association="Self.FK_Rezervacija_Knjiga">
+            <End Role="Knjiga" EntitySet="Knjiga" />
+            <End Role="Rezervacija" EntitySet="Rezervacija" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="knjiznicaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Prezime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Datum_Rodjenja" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Adresa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Broj_telefona" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Datum_obnove_clanstva" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UlogaID" Type="Int32" />
+          <Property Name="Pass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KnjigaID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Clan_Role" FromRole="Clan" ToRole="Role" />
+          <NavigationProperty Name="Rezervacija" Relationship="Self.FK_Rezervacija_Clan" FromRole="Clan" ToRole="Rezervacija" />
+        </EntityType>
+        <EntityType Name="Knjiga">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Autor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Godina_izdanja" Type="Int32" />
+          <Property Name="Dostupnost" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Rezervacija" Relationship="Self.FK_Rezervacija_Knjiga" FromRole="Knjiga" ToRole="Rezervacija" />
+        </EntityType>
+        <EntityType Name="Knjiznicar">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Prezime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Pass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Rezervacija">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Clan_ID" Type="Int32" />
+          <Property Name="Knjiga_ID" Type="Int32" />
+          <Property Name="Datum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Clan" Relationship="Self.FK_Rezervacija_Clan" FromRole="Rezervacija" ToRole="Clan" />
+          <NavigationProperty Name="Knjiga" Relationship="Self.FK_Rezervacija_Knjiga" FromRole="Rezervacija" ToRole="Knjiga" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uloga" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Clan" Relationship="Self.FK_Clan_Role" FromRole="Role" ToRole="Clan" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Clan_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Clan" Type="Self.Clan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Clan">
+              <PropertyRef Name="UlogaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezervacija_Clan">
+          <End Role="Clan" Type="Self.Clan" Multiplicity="0..1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clan">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="Clan_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezervacija_Knjiga">
+          <End Role="Knjiga" Type="Self.Knjiga" Multiplicity="0..1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Knjiga">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="Knjiga_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="knjiznicaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clan" EntityType="Self.Clan" />
+          <EntitySet Name="Knjiga" EntityType="Self.Knjiga" />
+          <EntitySet Name="Knjiznicar" EntityType="Self.Knjiznicar" />
+          <EntitySet Name="Rezervacija" EntityType="Self.Rezervacija" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_Clan_Role" Association="Self.FK_Clan_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Clan" EntitySet="Clan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezervacija_Clan" Association="Self.FK_Rezervacija_Clan">
+            <End Role="Clan" EntitySet="Clan" />
+            <End Role="Rezervacija" EntitySet="Rezervacija" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezervacija_Knjiga" Association="Self.FK_Rezervacija_Knjiga">
+            <End Role="Knjiga" EntitySet="Knjiga" />
+            <End Role="Rezervacija" EntitySet="Rezervacija" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="knjiznicaModelStoreContainer" CdmEntityContainer="knjiznicaEntities">
+          <EntitySetMapping Name="Clan">
+            <EntityTypeMapping TypeName="knjiznicaModel.Clan">
+              <MappingFragment StoreEntitySet="Clan">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Datum_Rodjenja" ColumnName="Datum_Rodjenja" />
+                <ScalarProperty Name="Adresa" ColumnName="Adresa" />
+                <ScalarProperty Name="Broj_telefona" ColumnName="Broj_telefona" />
+                <ScalarProperty Name="Datum_obnove_clanstva" ColumnName="Datum_obnove_clanstva" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UlogaID" ColumnName="UlogaID" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="KnjigaID" ColumnName="KnjigaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Knjiga">
+            <EntityTypeMapping TypeName="knjiznicaModel.Knjiga">
+              <MappingFragment StoreEntitySet="Knjiga">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="Autor" ColumnName="Autor" />
+                <ScalarProperty Name="Godina_izdanja" ColumnName="Godina_izdanja" />
+                <ScalarProperty Name="Dostupnost" ColumnName="Dostupnost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Knjiznicar">
+            <EntityTypeMapping TypeName="knjiznicaModel.Knjiznicar">
+              <MappingFragment StoreEntitySet="Knjiznicar">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rezervacija">
+            <EntityTypeMapping TypeName="knjiznicaModel.Rezervacija">
+              <MappingFragment StoreEntitySet="Rezervacija">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Clan_ID" ColumnName="Clan_ID" />
+                <ScalarProperty Name="Knjiga_ID" ColumnName="Knjiga_ID" />
+                <ScalarProperty Name="Datum" ColumnName="Datum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="knjiznicaModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Uloga" ColumnName="Uloga" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="knjiznicaModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

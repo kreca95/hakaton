@@ -1,0 +1,61 @@
+﻿@model IEnumerable<hakaton.Models.Knjiga>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Dodajte knjigu", "Create")
+</p>
+<table class="table" id="tablica">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Naziv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Autor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Godina_izdanja)
+            </th>
+            <th>Dostupnost</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naziv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Autor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Godina_izdanja)
+                </td>
+                <td>
+                    @if (item.Dostupnost == false)
+                    {
+                        <p class="glyphicon glyphicon-remove"></p>
+                    }
+                    else
+                    {
+                        <p class="glyphicon glyphicon-ok"></p>
+
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Uredi", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Detalji", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Brisanje", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

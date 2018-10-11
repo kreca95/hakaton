@@ -1,0 +1,110 @@
+﻿@{
+    Layout = null;
+}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Registration Page</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <!-- Ionicons -->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Content/css/adminlte.css">
+    <!-- iCheck -->
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<div class="register-box">
+    <div class="register-logo">
+    </div>
+
+    <div class="card">
+        <div class="card-body register-card-body">
+            <p class="login-box-msg">Registrirajte se</p>
+
+            <div class="form-group has-feedback">
+                <input id="ime" type="text" class="form-control" placeholder="Ime">
+                <span class="fa fa-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input id="prezime" type="email" class="form-control" placeholder="Prezime">
+                <span class="fa fa-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input id="mailR" type="email" class="form-control" placeholder="*Email">
+                <span class="fa fa-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input  id="sifraR" type="password" class="form-control" placeholder="*Sifra">
+                <span class="fa fa-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" name="broj" id="broj" placeholder="Broj telefona">
+                <span class="fa fa-lock form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <p class="errorLogin"></p>
+
+                <!-- /.col -->
+                <div class="col-4">
+                    <button type="submit" class="su-register-btn btn btn-primary btn-block btn-flat">Register</button>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+</div>
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+    $(".su-register-btn").click(function () {
+
+            $(".errorLogin").hide();
+            $(".errorLogin").text("Unesite mail i sifru");
+            $(".errorLogin").css("color","red")
+            var password = $("#sifraR").val();
+            var email = $("#mailR").val();
+            var ime = $("#ime").val();
+            var prezime = $("#prezime").val();
+            var br = $("#broj").val();
+            if ((password.length>5) || (email.length != 0)) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Register", "auth")',
+                    dataType: 'json',
+                    data: { password: password, email: email, ime: ime, prezime:prezime, br:br },
+                    success: (function (data) {
+                        if (data == "success") {
+                            window.location.href = "@Url.Action("index","profil")";
+                        } else {
+                            $(".errorLogin").text("Email je vec registriran");
+                            $(".errorLogin").show();
+                        }
+                    }),
+                    error: (function () {
+                        $(".errorLogin").show();
+                    })
+                });
+            } else {
+                if (email.length == 0)
+                {
+                    $(".errorLogin").text("Ispravno unesite email")
+                }
+                if (password.length < 5)
+                {
+                    $(".errorLogin").text("Sifra mora biti dulja od 5 znakova");
+                }
+                if (email.length == 0 && password.length < 5) {
+                    $(".errorLogin").text("Pravilno unesite sifru i email");
+                }
+                $(".errorLogin").show();
+            }
+        });
+
+</script>

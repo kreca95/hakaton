@@ -1,0 +1,39 @@
+﻿@model hakaton.Models.Knjiga
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Index</h2>
+
+<div class="form-group">
+    <p class="aa">Iznajmljena je knjiga</p><p id="k"></p>
+
+    @Html.DropDownListFor(model => model.Naziv, new SelectList(ViewBag.Knjige, "ID", "Naziv"), "Izaberite knjigu", new { @class = "dropdown show", @id = "lista" })
+</div>
+<button id="dugme">Iznajmi</button>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+
+<script>
+    $(".aa").hide();
+
+    $("#dugme").click(function () {
+        var nazivKnjige = $("#lista option:selected").text();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RezervacijaKorisnikJSON", "rezervacija")',
+            dataType: 'json',
+            data: {nazivKnjige: nazivKnjige },
+            success: (function (data) {
+                $("#k").text(nazivKnjige);
+                $(".aa").show();
+
+                    console.log("defakto umjetnik");
+            }),
+            error: (function () {
+                console.log("daasasasasasdsa");
+            })
+        });
+    });
+</script>   

@@ -1,0 +1,197 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/css/adminlte.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        table {
+            width: 100%;
+            table-layout: fixed;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css" />
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="@Url.Action("index","home")" class="brand-link">
+                @*<img src="../../dist/img/AdminLTELogo.png"
+                    alt="AdminLTE Logo"
+                    class="brand-image img-circle elevation-3"
+                    style="opacity: .8">*@
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    @*<div class="image">
+                            <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        </div>*@
+                    <div class="info">
+                        <a href="#" class="d-block">@User.Identity.Name</a>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("index","profil")" class="nav-link">
+                                <i class="glyphicon glyphicon-home"></i>
+                                <p>
+                                    Naslovna
+                                </p>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Clan"))
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("index","rezervacija")" class="nav-link">
+                                    <i class="glyphicon glyphicon-home"></i>
+                                    <p>
+                                        Rezervacija
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+
+
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Knjiznicar"))
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("rezervacija","knjiznicars")" class="nav-link">
+                                    <i class="glyphicon glyphicon-book"></i>
+                                    <p>
+                                        Rezervacije
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="@Url.Action("index","Clans")" class="nav-link">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    <p>
+                                        Clanovi
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("index","Knjigas")" class="nav-link">
+                                    <i class="glyphicon glyphicon-book"></i>
+                                    <p>
+                                        Knjige
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("evidencija","knjiznicars")" class="nav-link">
+                                    <i class="glyphicon glyphicon-book"></i>
+                                    <p>
+                                        Evidencija rezervacija
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @*<li class="nav-item has-treeview">
+                                <a href="@Url.Action("index","profil")" class="nav-link">
+                                    <i class="glyphicon glyphicon-book"></i>
+                                    <p>
+                                        Profil
+                                    </p>
+                                </a>
+                            </li>*@
+
+                        @if (HttpContext.Current.User.Identity.IsAuthenticated == true)
+                        {
+                            <li>
+                                <a href="@Url.Action("logOut","auth")" class="nav-item ">
+                                    <i class="glyphicon glyphicon-log-out"></i>
+                                    Odjavite se
+                                </a>
+                            </li>
+                        }
+
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+
+                        @*<div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="@Url.Action("index","profil")">Home</a></li>
+                            </ol>
+                        </div>*@
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="card">
+
+                    <div class="card-body">
+                        @RenderBody()
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+
+                    </div>
+                    <!-- /.card-footer-->
+                </div>
+                <!-- /.card -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer"></footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+
+    <script>    
+        $('#tablica').DataTable({
+            language:
+            {
+                url: "/Scripts/Skripte/prijevod.json"
+            }
+        });    
+    </script>
+</body>
+</html>

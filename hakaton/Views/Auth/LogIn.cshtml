@@ -1,0 +1,128 @@
+﻿@{
+    Layout = null;
+}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <!-- Ionicons -->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Content/css/adminlte.css">
+    <!-- iCheck -->
+</head>
+<div class="login-box">
+    <div class="login-logo">
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Prijavite se</p>
+
+            <div class="form-group has-feedback">
+                <input type="email" id="mail" class="form-control" placeholder="Email">
+                <span class="fa fa-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input id="sifra" type="password" class="form-control" placeholder="Password">
+                <span class="fa fa-lock form-control-feedback errorLogin"></span>
+            </div>
+
+
+            <button id="dugme" class="dugme btn btn-block btn-primary">
+                Prijava
+            </button>
+
+            <!-- /.social-auth-links -->
+
+
+            <p class="mb-0">
+                <a href="@Url.Action("registracija")">Registrirajte se</a></div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles/jquery")
+<script>
+
+
+        $("#dugme").click(function () {
+            $(".errorLogin").hide();
+            $(".errorLogin").text("Email ili lozinka nisu uneseni točno!!");
+
+            var password = $("#sifra").val();
+            var email = $("#mail").val();
+            if ((password != "") && (password != "")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("newLogin", "auth")',
+                    dataType: 'json',
+                    data: { password: password, email: email },
+                    success: (function (data) {
+                        if (data == "success") {
+                            window.location.href = "@Url.Action("index","profil")";
+                        } else {
+
+                            $(".errorLogin").show();
+                        }
+                    }),
+                    error: (function () {
+                        $(".errorLogin").show();
+                    })
+                });
+            } else {
+                $(".errorLogin").text("Polja ne smiju biti prazna!");
+                $(".errorLogin").show();
+            }
+        });
+
+
+        $(".su-register-btn").click(function () {
+
+            $(".errorLogin").hide();
+            $(".errorLogin").text("Unesite mail i sifru");
+            $(".errorLogin").css("color","red")
+            var password = $("#sifraR").val();
+            var email = $("#mailR").val();
+            var ime = $("#ime").val();
+            var prezime = $("#prezime").val();
+            var br = $("#broj").val();
+            if ((password.length>5) || (email.length != 0)) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Register", "auth")',
+                    dataType: 'json',
+                    data: { password: password, email: email, ime: ime, prezime:prezime, br:br },
+                    success: (function (data) {
+                        if (data == "success") {
+                            location.reload()
+                        } else {
+                            $(".errorLogin").text("Email je vec registriran");
+                            $(".errorLogin").show();
+                        }
+                    }),
+                    error: (function () {
+                        $(".errorLogin").show();
+                    })
+                });
+            } else {
+                if (email.length == 0)
+                {
+                    $(".errorLogin").text("Ispravno unesite email")
+                }
+                if (password.length < 5)
+                {
+                    $(".errorLogin").text("Sifra mora biti dulja od 5 znakova");
+                }
+                if (email.length == 0 && password.length < 5) {
+                    $(".errorLogin").text("Pravilno unesite sifru i email");
+                }
+                $(".errorLogin").show();
+            }
+        });
+
+</script>
