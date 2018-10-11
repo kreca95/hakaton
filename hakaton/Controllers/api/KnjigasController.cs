@@ -92,7 +92,7 @@ namespace hakaton.Controllers.api
             Knjiga knjiga = db.Knjiga.Find(id);
             if (knjiga == null)
             {
-                return NotFound();
+                //return NotFound();
             }
 
             db.Knjiga.Remove(knjiga);
